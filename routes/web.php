@@ -15,4 +15,6 @@ Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::get('/add-device', [AppDeviceController::class, 'index'])->name('add-device');
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 

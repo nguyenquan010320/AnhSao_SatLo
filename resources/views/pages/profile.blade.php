@@ -1,6 +1,10 @@
 @extends('../layout')
 @section('style')
     <style>
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
         .form-control:focus {
             box-shadow: none;
             border-color: #BA68C8
@@ -32,7 +36,7 @@
         }
 
         .labels {
-            font-size: 11px
+            font-size: 16px
         }
 
         .add-experience:hover {
@@ -47,24 +51,27 @@
     <div id="content">
         <div class="profile__container">
             <div class="container rounded bg-white mt-5 mb-5">
-                <div class="row">
-                    <!-- Avatar Section -->
-                    <div class="col-md-3 border-right">
-                        <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                            <img id="avatar-preview" class="rounded-circle mt-5" width="150px"
-                                src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
-                                alt="Avatar">
-                            <button id="edit-avatar-btn" class="btn btn-outline-primary btn-sm mt-3">Sửa
-                                avatar</button>
-                            <input type="file" id="avatar-input" class="form-control mt-2 d-none" accept="image/*">
-                            <span class="font-weight-bold mt-2">AdminWeb</span>
-                            <span class="text-black-50">adminweb@mail.com.my</span>
-                        </div>
-                    </div>
+                <form action="" method="POST">
 
-                    <!-- User Info Section -->
-                    <div class="col-md-9 border-right">
-                        <form action="">
+                    <div class="row">
+
+                        <!-- Avatar Section -->
+                        <div class="col-md-3 border-right">
+                            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                                <img id="avatar-preview" class="rounded-circle mt-5" width="150px"
+                                    src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+                                    alt="Avatar">
+                                <a  id="edit-avatar-btn" class="btn btn-outline-primary btn-sm mt-3">Sửa
+                                    avatar</a>
+                                <input type="file" id="avatar-input" class="form-control mt-2 d-none" accept="image/*">
+                                <span class="font-weight-bold mt-2">AdminWeb</span>
+                                <span class="text-black-50">adminweb@mail.com.my</span>
+                            </div>
+                        </div>
+                        <!-- Avatar Section -->
+
+                        <!-- User Info Section -->
+                        <div class="col-md-9 border-right">
                             <div class="p-3 py-5">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h4 class="text-right">Thông tin cá nhân</h4>
@@ -78,32 +85,37 @@
                                         <label class="labels">Tên</label>
                                         <input type="text" class="form-control" placeholder="Tên" value="">
                                     </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 mt-3">
                                         <label class="labels">Số điện thoại</label>
                                         <input type="text" class="form-control" placeholder="Số điện thoại"
                                             value="">
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 mt-3">
                                         <label class="labels">Email</label>
                                         <input type="text" class="form-control" placeholder="Email" value="">
                                     </div>
-                                    <div class="col-md-12">
-                                        <label class="labels">Mật khẩu</label>
+                                    <div class="col-md-12 mt-3">
+                                        <label class="labels">Mật khẩu hiện tại</label>
+                                        <input type="password" class="form-control" placeholder="Mật khẩu" value="">
+                                    </div>
+                                    <div class="col-md-12 mt-3">
+                                        <label class="labels">Mật khẩu mới</label>
+                                        <input type="password" class="form-control" placeholder="Mật khẩu" value="">
+                                    </div>
+                                    <div class="col-md-12 mt-3">
+                                        <label class="labels">Nhập lại mật khẩu</label>
                                         <input type="password" class="form-control" placeholder="Mật khẩu" value="">
                                     </div>
                                 </div>
-                                <div class="mt-5 text-center">
-                                    <button class="btn btn-primary profile-button" type="button">Lưu hồ sơ</button>
+
+                                <div class="mt-4 text-center mb-10">
+                                    <button class="btn btn-primary profile-button" type="button">Cập nhật</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
-
-
         </div>
     </div>
 @endsection

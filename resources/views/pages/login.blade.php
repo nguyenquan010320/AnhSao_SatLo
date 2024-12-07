@@ -7,6 +7,10 @@
     <title>Đăng nhập</title>
 </head>
 <style>
+
+    .text-danger {
+        color: red;
+    }
     html,
     body {
         align-items: center;
@@ -413,8 +417,11 @@
 </style>
 
 <body>
-    <form method="POST" action="" id="login-form" class="login-form" autocomplete="off" role="main">
+   
+    <form method="POST" action="{{route('login')}}" id="login-form" class="login-form" autocomplete="off" role="main">
+        @csrf
         <div>
+            <span class="text-danger">{{ session('error')}}</span>
             <label class="label-email">
                 <input type="email" class="text" name="email" placeholder="Tài khoản" tabindex="1" required />
                 <span class="required">Tài khoản</span>
