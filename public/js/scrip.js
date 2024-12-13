@@ -84,7 +84,7 @@ Highcharts.chart(id, {
         formatter: function () {
             console.log(`21`, this);
             return `<b>Thời gian</b>: ${this.key} <br>
-            <b>Độ dịch chuyển</b>${this.y} cm
+            <b>Độ dịch chuyển</b>: ${this.y} cm
             `;
         }
     },

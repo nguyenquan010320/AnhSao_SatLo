@@ -127,8 +127,7 @@
         };
 
          client.onConnect = function () {
-            isConnected = true;
-            clearTimeout(timeout); // Hủy timeout nếu kết nối thành công
+            isConnected = true; // Hủy timeout nếu kết nối thành công
             console.log("Kết nối thành công!");
         };
 
@@ -206,6 +205,8 @@
         client.connect({
             onSuccess: () => {
                 console.log("Kết nối thành công!");
+                clearTimeout(timeout); // Xóa timeout nếu kết nối thành công
+                client.onConnect();
                 // Subscribe một chủ đề
                 const topic = "LangNu/report";
                 client.subscribe(topic, {
