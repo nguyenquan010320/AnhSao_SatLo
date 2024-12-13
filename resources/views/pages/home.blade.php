@@ -122,6 +122,10 @@
         // Hàm xử lý khi kết nối thành công
         client.onConnectionLost = (responseObject) => {
             if (responseObject.errorCode !== 0) {
+                checkColor('sl1', 0, 0);
+                checkColor('sl2', 0, 0);
+                checkColor('sl3', 0, 0);
+                isConnected = false;
                 console.log("Kết nối bị mất: " + responseObject.errorMessage);
             }
         };
@@ -220,7 +224,10 @@
             },
             useSSL: true, // Sử dụng SSL khi kết nối WebSocket
             onFailure: (error) => {
-                clearTimeout(timeout);
+                checkColor('sl1', 0, 0);
+                checkColor('sl2', 0, 0);
+                checkColor('sl3', 0, 0);
+                isConnected = false;
                 console.error("Kết nối thất bại: " + error.errorMessage);
                 document.getElementById("status").textContent = "Kết nối thất bại";
             },
