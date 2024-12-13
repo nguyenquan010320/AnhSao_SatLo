@@ -78,7 +78,7 @@
             </div>
             <!-- Date -->
             <div class="mt-4 text-center mb-10">
-                <button id="sendButton" class="btn btn-primary">Calib</button>
+                <button id="sendButton" class="btn btn-primary">Reset</button>
             </div>
             <div id="container" class="container"></div>
             <div id="container1" class="container"></div>
