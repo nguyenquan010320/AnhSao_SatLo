@@ -1,13 +1,13 @@
 @extends('../layout')
 @section('style')
-<style>
-    #calibrateButton {
-        position: absolute;
-        bottom: 50%;
-        right: 10%;
-        border-radius: 0;
-    }
-</style>
+    <style>
+        #calibrateButton {
+            position: absolute;
+            bottom: 50%;
+            right: 10%;
+            border-radius: 0;
+        }
+    </style>
 @endsection
 @section('content')
     {{-- {{ dd($datas)}} --}}
@@ -18,13 +18,13 @@
             <div class="map-container">
                 <img src="{{ asset('img/langsan.png') }}" alt="Google Maps" class="gg_maps">
                 <div class="map-buttons">
-                    
-                            <button id="sl1" title="" class="btn__one">SL1</button>
-                       
-                            <button id="sl2" title="" class="btn__two">SL2</button>
-                        
-                            <button id="sl3" title="" class="btn__three">SL3</button>
-                        
+
+                    <button id="sl1" title="" class="btn__one">SL1</button>
+
+                    <button id="sl2" title="" class="btn__two">SL2</button>
+
+                    <button id="sl3" title="" class="btn__three">SL3</button>
+
                     <button title="" class="btn__gateway">Gateway</button>
                 </div>
 
@@ -92,7 +92,7 @@
 @section('js')
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDetK1VIdWEbAjP4xPt6foihYDjOmrEPM4&callback=myMap">
     </script>
-    <script src="{{asset('js/mqttws31.min.js')}}"></script>
+    <script src="{{ asset('js/mqttws31.min.js') }}"></script>
 
 
     <script>
@@ -100,10 +100,10 @@
         const brokerUrl = "broker.emqx.io"; // Thay bằng MQTT broker của bạn
         const brokerPort = 8084; // Port hỗ trợ WebSocket
         const clientId = "mqttjs_" + Math.random().toString(16).substr(2, 8); // Tạo ID ngẫu nhiên cho client
-    
+
         // Tạo một MQTT client
         var client = new Paho.MQTT.Client(brokerUrl, brokerPort, clientId);
-    
+
         // Hàm xử lý khi kết nối thành công
         client.onConnectionLost = (responseObject) => {
             if (responseObject.errorCode !== 0) {
@@ -111,23 +111,57 @@
             }
         };
 
+        function createDatas(dat) {
+            if (dat) {
+                // Tạo một đối tượng XMLHttpRequest
+                const xhr = new XMLHttpRequest();
+
+                // URL của API hoặc server
+                const url = `{{route('store-statisticals')}}`;
+
+                // Dữ liệu bạn muốn gửi
+                const data = JSON.stringify(dat);
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                // Mở kết nối với phương thức POST
+                xhr.open("POST", url, true);
+
+                // Đặt tiêu đề Content-Type
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xhr.setRequestHeader("X-CSRF-TOKEN", csrfToken); 
+                // Xử lý sự kiện khi có phản hồi từ server
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) { // 4: Request hoàn thành
+                        if (xhr.status === 200) { // 200: Thành công
+                            console.log("Response:", xhr.responseText);
+                        } else {
+                            console.error("Error:", xhr.statusText);
+                        }
+                    }
+                };
+
+                // Gửi yêu cầu với dữ liệu
+                xhr.send(data);
+            }
+        }
+        // trường hợp bấm nút từ thiết bị data trả về
         client.onMessageArrived = (message) => {
             //console.log(`Nhận tin nhắn từ ${message.destinationName}: ${message.payloadString}`);
             const dat = JSON.parse(message.payloadString);
-            if(dat){
+            if (dat) {
                 checkColor('sl1', dat.node_online[0], dat.node_waring[0]);
                 checkColor('sl2', dat.node_online[1], dat.node_waring[1]);
                 checkColor('sl3', dat.node_online[2], dat.node_waring[2]);
                 checkColor('luquet', dat.node_online[3], dat.node_waring[3]);
+                createDatas(dat);
             }
             // Hiển thị danh sách nhiệt độ
-            
+
         };
 
         function checkColor(selector, node_online, node_waring) {
             const node = document.getElementById(selector);
-            if(node_online > 0) {
-                switch(node_waring) {
+            if (node_online > 0) {
+                switch (node_waring) {
                     case 1:
                         node.style.backgroundColor = 'green';
                         break;
@@ -141,17 +175,17 @@
                         node.style.backgroundColor = 'gray';
                         break;
                 }
-            }else{
+            } else {
                 node.style.backgroundColor = 'gray';
             }
             console.log("1231313", node_online, node_waring);
         }
-    
+
         // Kết nối tới broker
         client.connect({
             onSuccess: () => {
                 console.log("Kết nối thành công!");
-    
+
                 // Subscribe một chủ đề
                 const topic = "LangNu/report";
                 client.subscribe(topic, {
@@ -170,20 +204,20 @@
             }
         });
         const calibrateButton = document.getElementById('sendButton');
-// Lắng nghe sự kiện nhấn phím
-calibrateButton.addEventListener('click', (event) => {
-    // Tạo thông điệp cần gửi
-    const message = new Paho.MQTT.Message(JSON.stringify({ cmd: 'calib' }));
-        message.destinationName = "LangNu/cmd";
-        
-        // Gửi thông điệp đến chủ đề LangNu/cmd
-        client.send(message);
-        console.log('Calibration command sent:', message.payloadString);
-});
+        // Lắng nghe sự kiện nhấn phím
+        calibrateButton.addEventListener('click', (event) => {
+            // Tạo thông điệp cần gửi
+            const message = new Paho.MQTT.Message(JSON.stringify({
+                cmd: 'calib'
+            }));
+            message.destinationName = "LangNu/cmd";
 
-
+            // Gửi thông điệp đến chủ đề LangNu/cmd
+            client.send(message);
+            console.log('Calibration command sent:', message.payloadString);
+        });
     </script>
-    
+
     <script>
         const elevationData = [
             [0.0, 225],

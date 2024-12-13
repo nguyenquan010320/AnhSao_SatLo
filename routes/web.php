@@ -4,6 +4,7 @@ use App\Http\Controllers\AppDeviceController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StatisticalController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -18,4 +19,5 @@ Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/update-info', [LoginController::class, 'updateInfo'])->name('update-info');
+Route::post('/store-statisticals', [StatisticalController::class, 'store'])->name('store-statisticals');
 
