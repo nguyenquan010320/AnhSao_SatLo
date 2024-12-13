@@ -1,5 +1,14 @@
 @extends('../layout')
-
+@section('style')
+<style>
+    #calibrateButton {
+        position: absolute;
+        bottom: 50%;
+        right: 10%;
+        border-radius: 0;
+    }
+</style>
+@endsection
 @section('content')
     {{-- {{ dd($datas)}} --}}
     <!-- MAPS -->
@@ -9,19 +18,13 @@
             <div class="map-container">
                 <img src="{{ asset('img/langsan.png') }}" alt="Google Maps" class="gg_maps">
                 <div class="map-buttons">
-                    @foreach ($datas as $data)
-                        @if (isset($data) && $data['name'] == 'sl1')
-                            <button title="" class="btn__one {{ $statusClass[$data['status']] }}">SL1</button>
-                        @endif
-
-                        @if (isset($data) && $data['name'] == 'sl2')
-                            <button title="" class="btn__two {{ $statusClass[$data['status']] }}">SL2</button>
-                        @endif
-                        @if (isset($data) && $data['name'] == 'sl3')
-                            <button title="" class="btn__three {{ $statusClass[$data['status']] }}">SL3</button>
-                        @endif
-                    @endforeach
-
+                    
+                            <button id="sl1" title="" class="btn__one">SL1</button>
+                       
+                            <button id="sl2" title="" class="btn__two">SL2</button>
+                        
+                            <button id="sl3" title="" class="btn__three">SL3</button>
+                        
                     <button title="" class="btn__gateway">Gateway</button>
                 </div>
 
@@ -42,7 +45,7 @@
                         <div class="section">A3</div>
                     </div>
                 </div>
-                <button title="" class="btn__col__warning ">Lũ quét</button>
+                <button id="luquet" title="" class="btn__col__warning ">Lũ quét</button>
             </div>
         </div>
         <!-- MAPS -->
@@ -75,7 +78,7 @@
             </div>
             <!-- Date -->
             <div class="mt-4 text-center mb-10">
-                <button id="sendButton" class="btn btn-primary">Topic</button>
+                <button id="sendButton" class="btn btn-primary">Calib</button>
             </div>
             <div id="container" class="container"></div>
             <div id="container1" class="container"></div>
@@ -89,31 +92,98 @@
 @section('js')
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDetK1VIdWEbAjP4xPt6foihYDjOmrEPM4&callback=myMap">
     </script>
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="{{asset('js/mqttws31.min.js')}}"></script>
+
+
     <script>
-        const client = mqtt.connect('wss://');
+        // Kết nối tới MQTT broker
+        const brokerUrl = "broker.emqx.io"; // Thay bằng MQTT broker của bạn
+        const brokerPort = 8084; // Port hỗ trợ WebSocket
+        const clientId = "mqttjs_" + Math.random().toString(16).substr(2, 8); // Tạo ID ngẫu nhiên cho client
+    
+        // Tạo một MQTT client
+        var client = new Paho.MQTT.Client(brokerUrl, brokerPort, clientId);
+    
+        // Hàm xử lý khi kết nối thành công
+        client.onConnectionLost = (responseObject) => {
+            if (responseObject.errorCode !== 0) {
+                console.log("Kết nối bị mất: " + responseObject.errorMessage);
+            }
+        };
 
-        client.on('connect', () => {
-            console.log('Đã kết nối đến MQTT broker');
-        });
+        client.onMessageArrived = (message) => {
+            //console.log(`Nhận tin nhắn từ ${message.destinationName}: ${message.payloadString}`);
+            const dat = JSON.parse(message.payloadString);
+            if(dat){
+                checkColor('sl1', dat.node_online[0], dat.node_waring[0]);
+                checkColor('sl2', dat.node_online[1], dat.node_waring[1]);
+                checkColor('sl3', dat.node_online[2], dat.node_waring[2]);
+                checkColor('luquet', dat.node_online[3], dat.node_waring[3]);
+            }
+            // Hiển thị danh sách nhiệt độ
+            
+        };
 
-        client.on('error', (err) => {
-            console.error('Kết nối lỗi:', err);
-        });
-
-        document.getElementById('sendButton').addEventListener('click', () => {
-            const topic = "LangNu/cmd";
-            const message = "Hello, MQTT!";
-
-            client.publish(topic, message, (err) => {
-                if (err) {
-                    console.error('Gửi dữ liệu thất bại:', err);
-                } else {
-                    console.log(`Đã gửi: "${message}" tới topic "${topic}"`);
+        function checkColor(selector, node_online, node_waring) {
+            const node = document.getElementById(selector);
+            if(node_online > 0) {
+                switch(node_waring) {
+                    case 1:
+                        node.style.backgroundColor = 'green';
+                        break;
+                    case 2:
+                        node.style.backgroundColor = 'yellow';
+                        break;
+                    case 3:
+                        node.style.backgroundColor = 'red';
+                        break;
+                    default:
+                        node.style.backgroundColor = 'gray';
+                        break;
                 }
-            });
+            }else{
+                node.style.backgroundColor = 'gray';
+            }
+            console.log("1231313", node_online, node_waring);
+        }
+    
+        // Kết nối tới broker
+        client.connect({
+            onSuccess: () => {
+                console.log("Kết nối thành công!");
+    
+                // Subscribe một chủ đề
+                const topic = "LangNu/report";
+                client.subscribe(topic, {
+                    onSuccess: () => {
+                        console.log(`Đã đăng ký chủ đề: ${topic}`);
+                    },
+                    onFailure: (error) => {
+                        console.error(`Lỗi khi đăng ký chủ đề: ${error.errorMessage}`);
+                    }
+                });
+            },
+            useSSL: true, // Sử dụng SSL khi kết nối WebSocket
+            onFailure: (error) => {
+                console.error("Kết nối thất bại: " + error.errorMessage);
+                document.getElementById("status").textContent = "Kết nối thất bại";
+            }
         });
+        const calibrateButton = document.getElementById('sendButton');
+// Lắng nghe sự kiện nhấn phím
+calibrateButton.addEventListener('click', (event) => {
+    // Tạo thông điệp cần gửi
+    const message = new Paho.MQTT.Message(JSON.stringify({ cmd: 'calib' }));
+        message.destinationName = "LangNu/cmd";
+        
+        // Gửi thông điệp đến chủ đề LangNu/cmd
+        client.send(message);
+        console.log('Calibration command sent:', message.payloadString);
+});
+
+
     </script>
+    
     <script>
         const elevationData = [
             [0.0, 225],
