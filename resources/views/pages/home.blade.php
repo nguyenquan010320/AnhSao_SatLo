@@ -45,7 +45,7 @@
                         <div class="section">A3</div>
                     </div>
                 </div>
-                <button id="luquet" title="" class="btn__col__warning ">Lũ quét</button>
+                <button id="luquet" title="" class="btn__col__warning">Lũ quét</button>
             </div>
         </div>
         <!-- MAPS -->
