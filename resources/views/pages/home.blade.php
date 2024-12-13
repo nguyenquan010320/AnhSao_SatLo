@@ -250,12 +250,12 @@
 
     <script>
 
-        function getTK(dcm1 = [], dcm2 = [], dcm3 = []){
-            chartBao('container', 'Biểu đồ 1', dcm1);
-            chartBao('container1', 'Biểu đồ 2', dcm2);
-            chartBao('container2', 'Biểu đồ 3', dcm3);
+        function getTK(){
+            chartBao('container', 'Biểu đồ 1', `{{route('get-statisticals', ['type' =>'dcm1'])}}`, 'dcm1');
+            chartBao('container1', 'Biểu đồ 2', `{{route('get-statisticals',['type' =>'dcm2'])}}`, 'dcm2');
+            chartBao('container2', 'Biểu đồ 3', `{{route('get-statisticals',['type' =>'dcm3'])}}`, 'dcm3');
         }
-
+        getTK();
 
        async function getData()   {
 
@@ -280,7 +280,7 @@
            {{--await xhr.send();--}}
         }
 
-        setInterval(getData, 5000);
+        // setInterval(getData, 5000);
 
     </script>
 @endsection

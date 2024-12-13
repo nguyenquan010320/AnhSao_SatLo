@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 class StatisticalController extends Controller
 {
     public function list(Request $request) {
+        $request = $request->all();
         $now = Carbon::now();
         // Lùi xuống 5 phút
         $timeMinus5Minutes = Carbon::now()->subMinutes(30);
@@ -24,9 +25,15 @@ class StatisticalController extends Controller
             foreach($records as $record){
                 $datas = Json::decode($record->data);
                 $time =  Carbon::parse($record->date)->format('H:i');
-                $dcm1[] = ['time' => $time, 'height' => $datas['dcm1']];
-                $dcm2[] = ['time' => $time, 'height' => $datas['dcm2']];
-                $dcm3[] = ['time' => $time, 'height' => $datas['dcm3']];
+                if($request['type'] == 'dcm1'){
+                    $dcm1[] = ['time' => $time, 'height' => $datas['dcm1']];
+                }
+                if($request['type'] == 'dcm2') {
+                    $dcm2[] = ['time' => $time, 'height' => $datas['dcm2']];
+                }
+                if($request['type'] == 'dcm3') {
+                    $dcm3[] = ['time' => $time, 'height' => $datas['dcm3']];
+                }
             }
             return response()->json([
                 'status' => 'success',
