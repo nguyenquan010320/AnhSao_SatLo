@@ -249,8 +249,38 @@
     </script>
 
     <script>
-        chartBao('container', 'Biểu đồ 1', @json($dcm1));
-        chartBao('container1', 'Biểu đồ 2', @json($dcm2));
-        chartBao('container2', 'Biểu đồ 3', @json($dcm3));
+
+        function getTK(dcm1 = [], dcm2 = [], dcm3 = []){
+            chartBao('container', 'Biểu đồ 1', dcm1);
+            chartBao('container1', 'Biểu đồ 2', dcm2);
+            chartBao('container2', 'Biểu đồ 3', dcm3);
+        }
+
+
+       async function getData()   {
+
+             await fetch(`{{route('get-statisticals')}}`)
+                 .then(response => {
+                     if (!response.ok) {
+                         throw new Error('Network response was not ok');
+                     }
+                     return response.json(); // or response.text() for non-JSON data
+                 })
+                 .then(data => {
+                     const datas = data.data;
+                     if(datas){
+                         getTK(datas.dcm1, datas.dcm2, datas.dcm3);
+                     } // Handle the response data here
+                 })
+                 .catch(error => {
+                     console.error('There was a problem with the fetch operation:', error);
+                 });
+
+
+           {{--await xhr.send();--}}
+        }
+
+        setInterval(getData, 5000);
+
     </script>
 @endsection

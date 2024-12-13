@@ -9,6 +9,42 @@ use Illuminate\Http\Request;
 
 class StatisticalController extends Controller
 {
+    public function list(Request $request) {
+        $now = Carbon::now();
+        // Lùi xuống 5 phút
+        $timeMinus5Minutes = Carbon::now()->subMinutes(30);
+//         dd($timeMinus5Minutes->format('H:i:s'),$now->format('H:i:s'));
+        $records = Statistical::whereBetween('date', [ $timeMinus5Minutes, $now])->get();
+
+        $dcm1 = [];
+        $dcm2 = [];
+        $dcm3 = [];
+
+        if($records){
+            foreach($records as $record){
+                $datas = Json::decode($record->data);
+                $time =  Carbon::parse($record->date)->format('H:i');
+                $dcm1[] = ['time' => $time, 'height' => $datas['dcm1']];
+                $dcm2[] = ['time' => $time, 'height' => $datas['dcm2']];
+                $dcm3[] = ['time' => $time, 'height' => $datas['dcm3']];
+            }
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Lưu dữ liệu thành công',
+                'data' => [
+                    'dcm1' => $dcm1,
+                    'dcm2' => $dcm2,
+                    'dcm3' => $dcm3
+                ],
+            ]);
+        }
+
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'không có dữ liệu',
+        ]);
+    }
     public function store(Request $request)
     {
         $data = $request->all();

@@ -20,4 +20,5 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/update-info', [LoginController::class, 'updateInfo'])->name('update-info');
 Route::post('/store-statisticals', [StatisticalController::class, 'store'])->name('store-statisticals');
+Route::get('/get-statisticals', [StatisticalController::class, 'list'])->name('get-statisticals');
 
