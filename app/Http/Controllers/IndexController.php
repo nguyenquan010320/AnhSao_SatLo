@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Statistical;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\Request;
@@ -10,12 +11,14 @@ use Illuminate\Support\Facades\DB;
 class IndexController extends Controller
 {
     public function index() {
-        
-        $records = DB::table('statisticals')
-        ->whereDate('date', Carbon::today())
 
-         // Exact date
-        ->get();
+        $now = Carbon::now();
+        // Lùi xuống 5 phút
+        $timeMinus5Minutes = Carbon::now()->subMinutes(5);
+//         dd($timeMinus5Minutes->format('H:i:s'),$now->format('H:i:s'));
+        $records = Statistical::whereBetween('date', [ $timeMinus5Minutes, $now])
+->get();
+
         $dcm1 = [];
         $dcm2 = [];
         $dcm3 = [];
@@ -30,5 +33,5 @@ class IndexController extends Controller
         return view('pages.home', compact('dcm1', 'dcm2', 'dcm3'));
     }
 
-    
+
 }

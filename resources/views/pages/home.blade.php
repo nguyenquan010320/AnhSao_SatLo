@@ -105,11 +105,31 @@
         // Tạo một MQTT client
         var client = new Paho.MQTT.Client(brokerUrl, brokerPort, clientId);
 
+        // Biến theo dõi trạng thái kết nối
+        let isConnected = false;
+
+        // Timeout: Ngắt kết nối sau 30 giây nếu không thành công
+        const timeout = setTimeout(() => {
+            if (!isConnected) {
+            checkColor('sl1', 0, 0);
+            checkColor('sl2', 0, 0);
+            checkColor('sl3', 0, 0);
+                console.log("Không thể kết nối trong 30 giây. Ngắt kết nối.");
+                client.disconnect();
+            }
+        }, 30000);
+
         // Hàm xử lý khi kết nối thành công
         client.onConnectionLost = (responseObject) => {
             if (responseObject.errorCode !== 0) {
                 console.log("Kết nối bị mất: " + responseObject.errorMessage);
             }
+        };
+
+         client.onConnect = function () {
+            isConnected = true;
+            clearTimeout(timeout); // Hủy timeout nếu kết nối thành công
+            console.log("Kết nối thành công!");
         };
 
         function createDatas(dat) {
@@ -128,7 +148,7 @@
 
                 // Đặt tiêu đề Content-Type
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                xhr.setRequestHeader("X-CSRF-TOKEN", csrfToken); 
+                xhr.setRequestHeader("X-CSRF-TOKEN", csrfToken);
                 // Xử lý sự kiện khi có phản hồi từ server
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) { // 4: Request hoàn thành
@@ -186,7 +206,6 @@
         client.connect({
             onSuccess: () => {
                 console.log("Kết nối thành công!");
-
                 // Subscribe một chủ đề
                 const topic = "LangNu/report";
                 client.subscribe(topic, {
@@ -202,7 +221,8 @@
             onFailure: (error) => {
                 console.error("Kết nối thất bại: " + error.errorMessage);
                 document.getElementById("status").textContent = "Kết nối thất bại";
-            }
+            },
+            timeout: 30
         });
         const calibrateButton = document.getElementById('sendButton');
         // Lắng nghe sự kiện nhấn phím
