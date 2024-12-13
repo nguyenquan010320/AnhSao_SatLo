@@ -219,6 +219,7 @@
             },
             useSSL: true, // Sử dụng SSL khi kết nối WebSocket
             onFailure: (error) => {
+                clearTimeout(timeout);
                 console.error("Kết nối thất bại: " + error.errorMessage);
                 document.getElementById("status").textContent = "Kết nối thất bại";
             },
