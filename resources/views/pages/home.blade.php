@@ -256,31 +256,5 @@
             chartBao('container2', 'Biểu đồ 3', `{{route('get-statisticals',['type' =>'dcm3'])}}`, 'dcm3');
         }
         getTK();
-
-       async function getData()   {
-
-             await fetch(`{{route('get-statisticals')}}`)
-                 .then(response => {
-                     if (!response.ok) {
-                         throw new Error('Network response was not ok');
-                     }
-                     return response.json(); // or response.text() for non-JSON data
-                 })
-                 .then(data => {
-                     const datas = data.data;
-                     if(datas){
-                         getTK(datas.dcm1, datas.dcm2, datas.dcm3);
-                     } // Handle the response data here
-                 })
-                 .catch(error => {
-                     console.error('There was a problem with the fetch operation:', error);
-                 });
-
-
-           {{--await xhr.send();--}}
-        }
-
-        // setInterval(getData, 5000);
-
     </script>
 @endsection
