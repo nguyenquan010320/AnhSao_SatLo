@@ -14,10 +14,9 @@ class IndexController extends Controller
 
         $now = Carbon::now();
         // Lùi xuống 5 phút
-        $timeMinus5Minutes = Carbon::now()->subMinutes(5);
+        $timeMinus5Minutes = Carbon::now()->subMinutes(30);
 //         dd($timeMinus5Minutes->format('H:i:s'),$now->format('H:i:s'));
-        $records = Statistical::whereBetween('date', [ $timeMinus5Minutes, $now])
-->get();
+        $records = Statistical::whereBetween('date', [ $timeMinus5Minutes, $now])->get();
 
         $dcm1 = [];
         $dcm2 = [];
