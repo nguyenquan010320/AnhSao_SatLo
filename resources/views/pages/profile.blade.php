@@ -51,25 +51,24 @@
     <div id="content">
         <div class="profile__container">
             <div class="container rounded bg-white mt-5 mb-5">
-                <form action="" method="POST">
-
+                <form action="{{route('update-info')}}" id="form-profile" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="row">
-
                         <!-- Avatar Section -->
                         <div class="col-md-3 border-right">
                             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                                 <img id="avatar-preview" class="rounded-circle mt-5" width="150px"
-                                    src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+                                    src="{{  Auth::user()->image ?? asset('img/avt.jpg') }}"
                                     alt="Avatar">
                                 <a  id="edit-avatar-btn" class="btn btn-outline-primary btn-sm mt-3">Sửa
                                     avatar</a>
-                                <input type="file" id="avatar-input" class="form-control mt-2 d-none" accept="image/*">
-                                <span class="font-weight-bold mt-2">AdminWeb</span>
-                                <span class="text-black-50">adminweb@mail.com.my</span>
+                                <input type="file" name="image" id="avatar-input" class="form-control mt-2 d-none" accept="image/*">
+                                <span class="font-weight-bold mt-2">{{Auth::user()->name_en}}</span>
+                                <span class="text-black-50">{{Auth::user()->email}}</span>
                             </div>
                         </div>
                         <!-- Avatar Section -->
-
+ 
                         <!-- User Info Section -->
                         <div class="col-md-9 border-right">
                             <div class="p-3 py-5">
@@ -78,38 +77,36 @@
                                 </div>
                                 <div class="row mt-2">
                                     <div class="col-md-6">
-                                        <label class="labels">Họ</label>
-                                        <input type="text" class="form-control" placeholder="Họ" value="">
+                                        <label class="labels">Họ và tên</label>
+                                        <input type="text" name="name_en" class="form-control" placeholder="Họ và tên" value="{{old('name_en')}}" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="labels">Tên</label>
-                                        <input type="text" class="form-control" placeholder="Tên" value="">
-                                    </div>
-                                    <div class="col-md-12 mt-3">
                                         <label class="labels">Số điện thoại</label>
-                                        <input type="text" class="form-control" placeholder="Số điện thoại"
-                                            value="">
-                                    </div>
-                                    <div class="col-md-12 mt-3">
-                                        <label class="labels">Email</label>
-                                        <input type="text" class="form-control" placeholder="Email" value="">
+                                        <input type="number" name="contact_en" class="form-control" placeholder="Số điện thoại"
+                                            value="{{old('contact_en')}}" required>
                                     </div>
                                     <div class="col-md-12 mt-3">
                                         <label class="labels">Mật khẩu hiện tại</label>
-                                        <input type="password" class="form-control" placeholder="Mật khẩu" value="">
+                                        <input type="password" name="pass_old" class="form-control" placeholder="Mật khẩu" value="{{old('pass_old')}}" required>
+                                        @error('pass_old')
+                                        <div class="text-red-500 text-sm notification__erro">{{ $message }}</div>
+                                    @enderror
                                     </div>
                                     <div class="col-md-12 mt-3">
                                         <label class="labels">Mật khẩu mới</label>
-                                        <input type="password" class="form-control" placeholder="Mật khẩu" value="">
+                                        <input type="password" name="pass_new" class="form-control" placeholder="Mật khẩu" value="{{old('pass_new')}}" required>
                                     </div>
                                     <div class="col-md-12 mt-3">
                                         <label class="labels">Nhập lại mật khẩu</label>
-                                        <input type="password" class="form-control" placeholder="Mật khẩu" value="">
+                                        <input type="password" name="pass_new_reenter" class="form-control" placeholder="Mật khẩu" value="{{old('pass_new_reenter')}}" required>
+                                        @error('pass_new_reenter')
+                                        <div class="text-red-500 text-sm notification__erro">{{ $message }}</div>
+                                    @enderror
                                     </div>
                                 </div>
 
                                 <div class="mt-4 text-center mb-10">
-                                    <button class="btn btn-primary profile-button" type="button">Cập nhật</button>
+                                    <input class="btn btn-primary profile-button" type="submit" value="Cập nhật">
                                 </div>
                             </div>
                         </div>
@@ -125,6 +122,7 @@
         const avatarInput = document.getElementById('avatar-input');
         const avatarPreview = document.getElementById('avatar-preview');
         const editAvatarBtn = document.getElementById('edit-avatar-btn');
+        // const formdata = document.getElementById('form-profile');
 
         // Khi bấm vào nút "Sửa avatar"
         editAvatarBtn.addEventListener('click', () => {
@@ -133,7 +131,8 @@
 
         // Hiển thị ảnh ngay khi chọn
         avatarInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
+
+            var file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {

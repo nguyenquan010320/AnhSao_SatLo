@@ -47,63 +47,37 @@
     <div id="content">
         <div class="profile__container">
             <div class="container rounded bg-white mt-5 mb-5">
-                <div class="row">
-                    <!-- Avatar Section -->
-                    <div class="col-md-3 border-right">
-                        <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                            <img id="avatar-preview" class="rounded-circle mt-5" width="150px"
-                                src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
-                                alt="Avatar">
-                            <button id="edit-avatar-btn" class="btn btn-outline-primary btn-sm mt-3">Sửa
-                                avatar</button>
-                            <input type="file" id="avatar-input" class="form-control mt-2 d-none" accept="image/*">
-                            <span class="font-weight-bold mt-2">AdminWeb</span>
-                            <span class="text-black-50">adminweb@mail.com.my</span>
-                        </div>
-                    </div>
-
-                    <!-- User Info Section -->
-                    <div class="col-md-9 border-right">
-                        <form action="">
-                            <div class="p-3 py-5">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h4 class="text-right">Thông tin cá nhân</h4>
-                                </div>
-                                <div class="row mt-2">
-                                    <div class="col-md-6">
-                                        <label class="labels">Họ</label>
-                                        <input type="text" class="form-control" placeholder="Họ" value="">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="labels">Tên</label>
-                                        <input type="text" class="form-control" placeholder="Tên" value="">
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-12">
-                                        <label class="labels">Số điện thoại</label>
-                                        <input type="text" class="form-control" placeholder="Số điện thoại"
-                                            value="">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label class="labels">Email</label>
-                                        <input type="text" class="form-control" placeholder="Email" value="">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label class="labels">Mật khẩu</label>
-                                        <input type="password" class="form-control" placeholder="Mật khẩu" value="">
-                                    </div>
-                                </div>
-                                <div class="mt-5 text-center">
-                                    <button class="btn btn-primary profile-button" type="button">Lưu hồ sơ</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                <div class="align-items-center mb-3 pt-3">
+                    <h3 class="text-center mb-4">Thêm Thiết Bị</h3>
                 </div>
+                <form>
+                    <div class="mb-3">
+                        <label for="deviceName" class="form-label">Tên Thiết Bị</label>
+                        <input type="text" class="form-control" id="deviceName" placeholder="Nhập tên thiết bị" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deviceType" class="form-label">Loại Thiết Bị</label>
+                        <select class="form-select" id="deviceType" required>
+                            <option selected disabled>Chọn loại thiết bị</option>
+                            <option value="1">Thiết bị 1</option>
+                            <option value="2">Thiết bị 2</option>
+                            <option value="3">Thiết bị 3</option>
+                            <option value="4">Thiết bị 4</option>
+                            <option value="5">Thiết bị 5</option>
+                            <option value="6">Thiết bị 6</option>
+                            <option value="7">Thiết bị 7</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deviceSerial" class="form-label">Số Serial</label>
+                        <input type="text" class="form-control" id="deviceSerial" placeholder="Nhập số serial" required>
+                    </div>
+                    <div class="mt-4 text-center pb-3">
+                        <input class="btn btn-primary profile-button" type="submit" value="Thêm tiết bị">
+                    </div>
+                        
+                </form>
             </div>
-
-
         </div>
     </div>
 @endsection

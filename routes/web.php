@@ -17,4 +17,5 @@ Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/update-info', [LoginController::class, 'updateInfo'])->name('update-info');
 

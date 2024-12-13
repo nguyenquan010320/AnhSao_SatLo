@@ -102,22 +102,7 @@ Highcharts.chart(id, {
     },
 
     accessibility: {
-        description: 'This line chart uses the Highcharts Annotations ' +
-            'feature to place labels at various points of interest. The ' +
-            'labels are responsive and will be hidden to avoid overlap on ' +
-            'small screens. Image description: An annotated line chart ' +
-            'illustrates the 8th stage of the 2017 Tour de France cycling ' +
-            'race from the start point in Dole to the finish line at Station ' +
-            'des Rousses. Altitude is plotted on the Y-axis, and distance is ' +
-            'plotted on the X-axis. The line graph is interactive, and the ' +
-            'user can trace the altitude level along the stage. The graph is ' +
-            'shaded below the data line to visualize the mountainous ' +
-            'altitudes encountered on the 187.5-kilometre stage. The three ' +
-            'largest climbs are highlighted at Col de la Joux, Côte de Viry ' +
-            'and the final 11.7-kilometer, 6.4% gradient climb to Montée de ' +
-            'la Combe de Laisia Les Molunes which peaks at 1200 meters above ' +
-            'sea level. The stage passes through the villages of Arbois, ' +
-            'Montrond, Bonlieu, Chassal and Saint-Claude along the route.',
+        description: '',
         landmarkVerbosity: 'one'
     },
 
@@ -263,7 +248,7 @@ Highcharts.chart(id, {
 
     xAxis: {
         labels: {
-            format: '{value} km'
+            format: '{value} h'
         },
         minRange: 5,
         title: {
@@ -282,7 +267,7 @@ Highcharts.chart(id, {
             text: null
         },
         labels: {
-            format: '{value} m'
+            format: '{value} cm'
         },
         accessibility: {
             description: 'Elevation',
@@ -291,8 +276,8 @@ Highcharts.chart(id, {
     },
 
     tooltip: {
-        headerFormat: 'Distance: {point.x:.1f} km<br>',
-        pointFormat: '{point.y} m a. s. l.',
+        headerFormat: 'Thời gian: {point.x:.1f} h<br>',
+        pointFormat: 'Tốc độ: {point.y} cm',
         shared: true
     },
 
