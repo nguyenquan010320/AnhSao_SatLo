@@ -31,18 +31,18 @@
                 <div class="container d-flex justify-content-center align-items-center">
                     <div class="rectangle d-flex btn__col__one">
                         <button id="" class="section">Cọc 1</button>
-                        <button id="D3" class="section">D1</button>
-                        <button id="A3" class="section">A1</button>
+                        <button id="d1" class="section">D1</button>
+                        <button id="a1" class="section">A1</button>
                     </div>
                     <div class="rectangle d-flex btn__col__two">
                         <button id="" class="section">Cọc 2</button>
-                        <button id="D3" class="section">D2</button>
-                        <button id="A3" class="section">A2</button>
+                        <button id="d2" class="section">D2</button>
+                        <button id="a2" class="section">A2</button>
                     </div>
                     <div class="rectangle d-flex btn__col__three">
                         <button id="" class="section">Cọc 3</button>
-                        <button id="D3" class="section">D3</button>
-                        <button id="A3" class="section">A3</button>
+                        <button id="d3" class="section">D3</button>
+                        <button id="a3" class="section">A3</button>
                     </div>
                 </div>
                 <button id="luquet" title="" class="btn__col__warning">Lũ quét</button>
