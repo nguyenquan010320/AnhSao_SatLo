@@ -89,8 +89,6 @@
 @endsection
 
 @section('js')
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDetK1VIdWEbAjP4xPt6foihYDjOmrEPM4&callback=myMap">
-    </script>
     <script src="{{ asset('js/mqttws31.min.js') }}"></script>
 
     <script>
