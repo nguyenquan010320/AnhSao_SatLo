@@ -68,10 +68,13 @@ class StatisticalController extends Controller
             $timestamp = Carbon::now();
             $datas = Json::encode($data);
 
-            Statistical::create([
-                'data' => $datas,
-                'date' => $timestamp,
-            ]);
+            if($datas){
+                Statistical::create([
+                    'data' => $datas,
+                    'date' => $timestamp,
+                ]);
+            }
+
             // Trả về dữ liệu dưới dạng JSON
             return response()->json([
                 'status' => 'success',
