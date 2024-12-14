@@ -155,6 +155,12 @@
                 checkColor('sl1', 0, 0);
                 checkColor('sl2', 0, 0);
                 checkColor('sl3', 0, 0);
+                checkDigitAnalog('d1');
+                checkDigitAnalog('d2');
+                checkDigitAnalog('d3');
+                checkDigitAnalog('a1');
+                checkDigitAnalog('a2');
+                checkDigitAnalog('a3');
                 console.log("Không thể kết nối trong 30 giây. Ngắt kết nối.");
                 client.disconnect();
             }
@@ -166,6 +172,12 @@
                 checkColor('sl1', 0, 0);
                 checkColor('sl2', 0, 0);
                 checkColor('sl3', 0, 0);
+                checkDigitAnalog('d1');
+                checkDigitAnalog('d2');
+                checkDigitAnalog('d3');
+                checkDigitAnalog('a1');
+                checkDigitAnalog('a2');
+                checkDigitAnalog('a3');
                 isConnected = false;
                 console.log("Kết nối bị mất: " + responseObject.errorMessage);
             }
@@ -218,11 +230,42 @@
                 checkColor('sl2', dat.node_online[1], dat.node_waring[1]);
                 checkColor('sl3', dat.node_online[2], dat.node_waring[2]);
                 checkColor('luquet', dat.node_online[3], dat.node_waring[3]);
+                if(dat.node_online[3] > 0){
+                    checkDigitAnalog('d1', dat.Digit[0]);
+                    checkDigitAnalog('d2', dat.Digit[1]);
+                    checkDigitAnalog('d3', dat.Digit[2]);
+                    checkDigitAnalog('a1', dat.Analog[0]);
+                    checkDigitAnalog('a2', dat.Analog[1]);
+                    checkDigitAnalog('a3', dat.Analog[2]);
+                }else{
+                    checkDigitAnalog('d1');
+                    checkDigitAnalog('d2');
+                    checkDigitAnalog('d3');
+                    checkDigitAnalog('a1');
+                    checkDigitAnalog('a2');
+                    checkDigitAnalog('a3');
+                }
                 createDatas(dat);
             }
             // Hiển thị danh sách nhiệt độ
 
         };
+
+        function checkDigitAnalog(selector, status = "") {
+
+            const node = document.getElementById(selector);
+            switch (status) {
+                case 0:
+                    node.style.backgroundColor = 'green';
+                    break;
+                case 1:
+                    node.style.backgroundColor = 'yellow';
+                    break;
+                default:
+                    node.style.backgroundColor = 'gray';
+                    break;
+            }
+        }
 
         function checkColor(selector, node_online, node_waring) {
             const node = document.getElementById(selector);
@@ -269,6 +312,12 @@
                 checkColor('sl1', 0, 0);
                 checkColor('sl2', 0, 0);
                 checkColor('sl3', 0, 0);
+                checkDigitAnalog('d1');
+                checkDigitAnalog('d2');
+                checkDigitAnalog('d3');
+                checkDigitAnalog('a1');
+                checkDigitAnalog('a2');
+                checkDigitAnalog('a3');
                 isConnected = false;
                 console.error("Kết nối thất bại: " + error.errorMessage);
                 document.getElementById("status").textContent = "Kết nối thất bại";
