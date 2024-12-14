@@ -67,7 +67,7 @@
         
 
         <div id="footer">
-            
+          <a class="navbar-brand" href="{{ route('home') }}"  id="title__header">Hệ thống cảnh báo khẩn cấp lũ quét và sạt lở đất</a>
         </div>
 
     </div>
