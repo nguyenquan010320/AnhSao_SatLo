@@ -155,6 +155,7 @@
                 checkColor('sl1', 0, 0);
                 checkColor('sl2', 0, 0);
                 checkColor('sl3', 0, 0);
+                checkColor('luquet', 0, 0);
                 checkDigitAnalog('d1');
                 checkDigitAnalog('d2');
                 checkDigitAnalog('d3');
@@ -172,6 +173,7 @@
                 checkColor('sl1', 0, 0);
                 checkColor('sl2', 0, 0);
                 checkColor('sl3', 0, 0);
+                checkColor('luquet', 0, 0);
                 checkDigitAnalog('d1');
                 checkDigitAnalog('d2');
                 checkDigitAnalog('d3');
@@ -312,6 +314,7 @@
                 checkColor('sl1', 0, 0);
                 checkColor('sl2', 0, 0);
                 checkColor('sl3', 0, 0);
+                checkColor('luquet', 0, 0);
                 checkDigitAnalog('d1');
                 checkDigitAnalog('d2');
                 checkDigitAnalog('d3');
