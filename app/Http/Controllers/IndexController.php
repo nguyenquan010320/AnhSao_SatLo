@@ -21,13 +21,19 @@ class IndexController extends Controller
         $dcm1 = [];
         $dcm2 = [];
         $dcm3 = [];
-        foreach($records as $record){
-            $datas = Json::decode($record->data);
-            $time =  Carbon::parse($record->date)->format('H:i');
-            $dcm1[] = ['time' => $time, 'height' => $datas['dcm1']];
-            $dcm2[] = ['time' => $time, 'height' => $datas['dcm2']];
-            $dcm3[] = ['time' => $time, 'height' => $datas['dcm3']];
+        if($records){
+            foreach($records as $record){
+                $datas = $record->data ? Json::decode($record->data) : [];
+                if($datas){
+                    $time =  Carbon::parse($record->date)->format('H:i');
+                    $dcm1[] = ['time' => $time, 'height' => $datas['dcm1']];
+                    $dcm2[] = ['time' => $time, 'height' => $datas['dcm2']];
+                    $dcm3[] = ['time' => $time, 'height' => $datas['dcm3']];
+                }
+
+            }
         }
+
         // dd($dcm3);
         return view('pages.home', compact('dcm1', 'dcm2', 'dcm3'));
     }
