@@ -25,7 +25,7 @@ class StatisticalController extends Controller
         }else{
             $records = Statistical::whereBetween('date', [ $timeMinus5Minutes, $now])->get();
         }
-        
+
         $dcm1 = [];
         $dcm2 = [];
         $dcm3 = [];
