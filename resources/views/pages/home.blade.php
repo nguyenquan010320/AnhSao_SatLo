@@ -55,26 +55,24 @@
             <h1 id="title__maps">Biểu đồ theo dõi</h1>
             <!-- Date -->
             <div class="container">
-                <form method="" action="">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label for="datetime-picker" class="form-label title__date">Xem lại từ ngày:</label>
-                            <input type="date" class="form-control" id="datetime-picker" name="datetime-picker">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="datetime-picker" class="form-label title__date">Từ giờ:</label>
-                            <input type="time" class="form-control" id="datetime-picker" name="datetime-picker">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="datetime-picker" class="form-label title__date">Đến giờ:</label>
-                            <input type="time" class="form-control" id="datetime-picker" name="datetime-picker">
-
-                        </div>
-                        <div class="col-md-1 d-flex align-items-end">
-                            <button type="" class="btn__date w-100 mt-3">Xem</button>
-                        </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="datetime-picker" class="form-label title__date">Xem lại từ ngày:</label>
+                        <input type="date" class="form-control" id="date" name="date">
                     </div>
-                </form>
+                    <div class="col-md-4">
+                        <label for="datetime-picker" class="form-label title__date">Từ giờ:</label>
+                        <input type="time" class="form-control" id="time-start" name="time-start">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="datetime-picker" class="form-label title__date">Đến giờ:</label>
+                        <input type="time" class="form-control" id="time-end" name="time-end">
+
+                    </div>
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button id="view-chart" class="btn__date w-100 mt-3">Xem</button>
+                    </div>
+                </div>
             </div>
             <!-- Date -->
             <div class="mt-4 text-center mb-10">
@@ -95,7 +93,28 @@
     </script>
     <script src="{{ asset('js/mqttws31.min.js') }}"></script>
 
+    <script>
 
+        const chart1 = chartBao('container', 'Biểu đồ 1');
+        const chart2 = chartBao('container1', 'Biểu đồ 2');
+        const chart3 = chartBao('container2', 'Biểu đồ 3');
+
+        const timeSet = setInterval(() => {
+            updateData(chart1, `{{route('get-statisticals' , ['type' => 'dcm1'])}}`, 'dcm1')
+            updateData(chart2, `{{route('get-statisticals' , ['type' => 'dcm2'])}}`, 'dcm2')
+            updateData(chart3 , `{{route('get-statisticals' ,['type' => 'dcm3'])}}`, 'dcm3')
+        }, 3000);
+
+        const viewchart = document.getElementById('view-chart');
+
+        viewchart.addEventListener('click', (event) => {
+            console.log(document.getElementById('date').value);
+            console.log(document.getElementById('time-start').value);
+            console.log(document.getElementById('time-end').value);
+            clearInterval(timeSet);
+        });
+
+    </script>
     <script>
         // Kết nối tới MQTT broker
         const brokerUrl = "broker.emqx.io"; // Thay bằng MQTT broker của bạn
@@ -111,9 +130,9 @@
         // Timeout: Ngắt kết nối sau 30 giây nếu không thành công
         const timeout = setTimeout(() => {
             if (!isConnected) {
-            checkColor('sl1', 0, 0);
-            checkColor('sl2', 0, 0);
-            checkColor('sl3', 0, 0);
+                checkColor('sl1', 0, 0);
+                checkColor('sl2', 0, 0);
+                checkColor('sl3', 0, 0);
                 console.log("Không thể kết nối trong 30 giây. Ngắt kết nối.");
                 client.disconnect();
             }
@@ -130,7 +149,7 @@
             }
         };
 
-         client.onConnect = function () {
+        client.onConnect = function () {
             isConnected = true; // Hủy timeout nếu kết nối thành công
             console.log("Kết nối thành công!");
         };
@@ -153,7 +172,7 @@
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.setRequestHeader("X-CSRF-TOKEN", csrfToken);
                 // Xử lý sự kiện khi có phản hồi từ server
-                xhr.onreadystatechange = function() {
+                xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4) { // 4: Request hoàn thành
                         if (xhr.status === 200) { // 200: Thành công
                             console.log("Response:", xhr.responseText);
@@ -167,6 +186,7 @@
                 xhr.send(data);
             }
         }
+
         // trường hợp bấm nút từ thiết bị data trả về
         client.onMessageArrived = (message) => {
             //console.log(`Nhận tin nhắn từ ${message.destinationName}: ${message.payloadString}`);
@@ -202,7 +222,7 @@
             } else {
                 node.style.backgroundColor = 'gray';
             }
-            console.log("1231313", node_online, node_waring);
+            // console.log("1231313", node_online, node_waring);
         }
 
         // Kết nối tới broker
@@ -246,15 +266,12 @@
             client.send(message);
             console.log('Calibration command sent:', message.payloadString);
         });
+
+
     </script>
 
     <script>
 
-        function getTK(){
-            chartBao('container', 'Biểu đồ 1', `{{route('get-statisticals', ['type' =>'dcm1'])}}`, 'dcm1');
-            chartBao('container1', 'Biểu đồ 2', `{{route('get-statisticals',['type' =>'dcm2'])}}`, 'dcm2');
-            chartBao('container2', 'Biểu đồ 3', `{{route('get-statisticals',['type' =>'dcm3'])}}`, 'dcm3');
-        }
-        getTK();
+
     </script>
 @endsection
