@@ -11,12 +11,21 @@ class StatisticalController extends Controller
 {
     public function list(Request $request) {
         $request = $request->all();
+        $date = isset($request["date"]) ? $request["date"] : null;
+        $timeStart = isset($request["timeStart"]) ? $request["timeStart"] : null;
+        $timeEnd = isset($request["timeEnd"]) ? $request["timeEnd"] : null;
         $now = Carbon::now();
-        // Lùi xuống 5 phút
         $timeMinus5Minutes = Carbon::now()->subMinutes(30);
-//         dd($timeMinus5Minutes->format('H:i:s'),$now->format('H:i:s'));
-        $records = Statistical::whereBetween('date', [ $timeMinus5Minutes, $now])->get();
-
+        if($date  && $timeStart && $timeEnd){
+            $dateStart = $date . ' ' . $timeStart;
+            $dateEnd = $date . ' ' . $timeEnd;
+            $dateStart = Carbon::createFromFormat('Y-m-d H:i', $dateStart);
+            $dateEnd = Carbon::createFromFormat('Y-m-d H:i', $dateEnd);
+            $records = Statistical::whereBetween('date', [ $dateStart, $dateEnd])->get();
+        }else{
+            $records = Statistical::whereBetween('date', [ $timeMinus5Minutes, $now])->get();
+        }
+        
         $dcm1 = [];
         $dcm2 = [];
         $dcm3 = [];

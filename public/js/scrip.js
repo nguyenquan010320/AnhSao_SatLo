@@ -1,9 +1,3 @@
-
-
-
-
-
-
 function chartBao(id, text) {
 // Chuyển dữ liệu thành định dạng Highcharts
     var cate = [];
@@ -81,5 +75,22 @@ function updateData(chart, url, type) {
 }
 
 
+function setParamsToUrl(url, params) {
+    try {
+        // Tạo đối tượng URL
+        const parsedUrl = new URL(url);
+
+        // Thêm hoặc cập nhật các tham số vào URL
+        for (const [key, value] of Object.entries(params)) {
+            parsedUrl.searchParams.set(key, value); // Set từng param
+        }
+
+        // Trả về URL mới với các tham số đã được cập nhật
+        return parsedUrl.toString();
+    } catch (error) {
+        console.error("Invalid URL:", error.message);
+        return null;
+    }
+}
 
 

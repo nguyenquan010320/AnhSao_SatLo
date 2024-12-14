@@ -108,10 +108,32 @@
         const viewchart = document.getElementById('view-chart');
 
         viewchart.addEventListener('click', (event) => {
-            console.log(document.getElementById('date').value);
-            console.log(document.getElementById('time-start').value);
-            console.log(document.getElementById('time-end').value);
+            const date = document.getElementById('date').value;
+            const timeStart = document.getElementById('time-start').value;
+            const timeEnd = document.getElementById('time-end').value;
+
+            const srcChart1 = setParamsToUrl(`{{route('get-statisticals')}}`, {
+                date, // Thay đổi giá trị của 'name'
+                timeStart,         // Thêm tham số mới
+                timeEnd, // Thêm tham số mới
+                type: 'dcm1'
+            });
+            const srcChart2 = setParamsToUrl(`{{route('get-statisticals')}}`, {
+                date, // Thay đổi giá trị của 'name'
+                timeStart,         // Thêm tham số mới
+                timeEnd, // Thêm tham số mới
+                type: 'dcm2'
+            });
+            const srcChart3 = setParamsToUrl(`{{route('get-statisticals')}}`, {
+                date, // Thay đổi giá trị của 'name'
+                timeStart,         // Thêm tham số mới
+                timeEnd, // Thêm tham số mới
+                type: 'dcm3'
+            });
             clearInterval(timeSet);
+            updateData(chart1, srcChart1, 'dcm1')
+            updateData(chart2, srcChart2, 'dcm2')
+            updateData(chart3 , srcChart3, 'dcm3')
         });
 
     </script>
