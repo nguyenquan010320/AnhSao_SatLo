@@ -125,22 +125,19 @@ li {
 }
 
 .rectangle {
-    width: 150px; /* Chiều rộng của container */
-    height: 50px; /* Chiều cao của container */
-    display: flex; /* Sử dụng flexbox */
-    border: 1px solid #000; /* Viền để hiển thị rõ hình chữ nhật */
+    width: 150px; 
+    height: 50px; 
+    display: flex; 
+    border: 1px solid #000; 
 }
 
 .section {
-    flex: 1; /* Chia đều không gian giữa 3 phần */
-    display: flex; /* Căn giữa nội dung */
-    justify-content: center; /* Căn giữa theo chiều ngang */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    border-right: 1px solid #000; /* Đường kẻ phân chia */
-}
-
-.section:last-child {
-    border-right: none; /* Xóa viền của phần cuối cùng */
+    flex: 1; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    border-right: 1px solid #000;
+    background-color: green;
 }
 
 .btn__col__warning {
