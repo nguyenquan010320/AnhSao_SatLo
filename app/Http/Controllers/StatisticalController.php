@@ -34,15 +34,18 @@ class StatisticalController extends Controller
             foreach($records as $record){
                 $datas = Json::decode($record->data);
                 $time =  Carbon::parse($record->date)->format('H:i');
-                if($request['type'] == 'dcm1'){
-                    $dcm1[] = ['time' => $time, 'height' => $datas['dcm1']];
+                if($datas){
+                    if($request['type'] == 'dcm1' && $datas['dcm1']){
+                        $dcm1[] = ['time' => $time, 'height' => $datas['dcm1']];
+                    }
+                    if($request['type'] == 'dcm2' && $datas['dcm2']) {
+                        $dcm2[] = ['time' => $time, 'height' => $datas['dcm2']];
+                    }
+                    if($request['type'] == 'dcm3' && $datas['dcm3']) {
+                        $dcm3[] = ['time' => $time, 'height' => $datas['dcm3']];
+                    }
                 }
-                if($request['type'] == 'dcm2') {
-                    $dcm2[] = ['time' => $time, 'height' => $datas['dcm2']];
-                }
-                if($request['type'] == 'dcm3') {
-                    $dcm3[] = ['time' => $time, 'height' => $datas['dcm3']];
-                }
+
             }
             return response()->json([
                 'status' => 'success',
