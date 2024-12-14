@@ -232,6 +232,7 @@
                 checkColor('sl2', dat.node_online[1], dat.node_waring[1]);
                 checkColor('sl3', dat.node_online[2], dat.node_waring[2]);
                 checkColor('luquet', dat.node_online[3], dat.node_waring[3]);
+                console.log('test', dat.node_online[3], dat.node_waring[3]);
                 if(dat.node_online[3] > 0){
                     checkDigitAnalog('d1', dat.Digit[0]);
                     checkDigitAnalog('d2', dat.Digit[1]);

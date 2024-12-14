@@ -29,7 +29,6 @@ function chartBao(id, text) {
         }],
         tooltip: {
             formatter: function () {
-                console.log(`21`, this);
                 return `<b>Thời gian</b>: ${this.key} <br>
             <b>Độ dịch chuyển</b>: ${this.y} cm
             `;
@@ -48,17 +47,14 @@ function chartBao(id, text) {
 
 function updateData(chart, url, type) {
     var charts = chart;
-    console.log(charts);
     fetch(url)
         .then(response => response.json())
         .then(data => {
             // Assuming the API returns data like { value: number }
             var data = data.data[type];
 
-            console.log(data);
             cate = data.map(e => e.time);
             heights = data.map(e => e.height);
-            console.log(cate, heights);
             // var timestamp = (new Date()).getTime(); // Current time in milliseconds
             charts.xAxis[0].setCategories(cate, false);  // Cập nhật categories (setCategories với tham số false để tránh làm mới biểu đồ)
             charts.series[0].setData(heights, false);
