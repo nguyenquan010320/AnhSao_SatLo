@@ -92,15 +92,14 @@
     <script src="{{ asset('js/mqttws31.min.js') }}"></script>
 
     <script>
-
         const chart1 = chartBao('container', 'Biểu đồ 1');
         const chart2 = chartBao('container1', 'Biểu đồ 2');
         const chart3 = chartBao('container2', 'Biểu đồ 3');
 
         const timeSet = setInterval(() => {
-            updateData(chart1, `{{route('get-statisticals' , ['type' => 'dcm1'])}}`, 'dcm1')
-            updateData(chart2, `{{route('get-statisticals' , ['type' => 'dcm2'])}}`, 'dcm2')
-            updateData(chart3 , `{{route('get-statisticals' ,['type' => 'dcm3'])}}`, 'dcm3')
+            updateData(chart1, `{{ route('get-statisticals', ['type' => 'dcm1']) }}`, 'dcm1')
+            updateData(chart2, `{{ route('get-statisticals', ['type' => 'dcm2']) }}`, 'dcm2')
+            updateData(chart3, `{{ route('get-statisticals', ['type' => 'dcm3']) }}`, 'dcm3')
         }, 3000);
 
         const viewchart = document.getElementById('view-chart');
@@ -110,30 +109,29 @@
             const timeStart = document.getElementById('time-start').value;
             const timeEnd = document.getElementById('time-end').value;
 
-            const srcChart1 = setParamsToUrl(`{{route('get-statisticals')}}`, {
+            const srcChart1 = setParamsToUrl(`{{ route('get-statisticals') }}`, {
                 date, // Thay đổi giá trị của 'name'
-                timeStart,         // Thêm tham số mới
+                timeStart, // Thêm tham số mới
                 timeEnd, // Thêm tham số mới
                 type: 'dcm1'
             });
-            const srcChart2 = setParamsToUrl(`{{route('get-statisticals')}}`, {
+            const srcChart2 = setParamsToUrl(`{{ route('get-statisticals') }}`, {
                 date, // Thay đổi giá trị của 'name'
-                timeStart,         // Thêm tham số mới
+                timeStart, // Thêm tham số mới
                 timeEnd, // Thêm tham số mới
                 type: 'dcm2'
             });
-            const srcChart3 = setParamsToUrl(`{{route('get-statisticals')}}`, {
+            const srcChart3 = setParamsToUrl(`{{ route('get-statisticals') }}`, {
                 date, // Thay đổi giá trị của 'name'
-                timeStart,         // Thêm tham số mới
+                timeStart, // Thêm tham số mới
                 timeEnd, // Thêm tham số mới
                 type: 'dcm3'
             });
             clearInterval(timeSet);
             updateData(chart1, srcChart1, 'dcm1')
             updateData(chart2, srcChart2, 'dcm2')
-            updateData(chart3 , srcChart3, 'dcm3')
+            updateData(chart3, srcChart3, 'dcm3')
         });
-
     </script>
     <script>
         // Kết nối tới MQTT broker
@@ -145,25 +143,34 @@
         var client = new Paho.MQTT.Client(brokerUrl, brokerPort, clientId);
 
         // Biến theo dõi trạng thái kết nối
-        let isConnected = false;
 
+        let timeoutId;
         // Timeout: Ngắt kết nối sau 30 giây nếu không thành công
-        const timeout = setTimeout(() => {
-            if (!isConnected) {
-                checkColor('sl1', 0, 0);
-                checkColor('sl2', 0, 0);
-                checkColor('sl3', 0, 0);
-                checkColor('luquet', 0, 0);
-                checkDigitAnalog('d1');
-                checkDigitAnalog('d2');
-                checkDigitAnalog('d3');
-                checkDigitAnalog('a1');
-                checkDigitAnalog('a2');
-                checkDigitAnalog('a3');
-                console.log("Không thể kết nối trong 30 giây. Ngắt kết nối.");
-                client.disconnect();
+        function setTimeOut(isConnected = false) {
+            if(!isConnected){
+                timeoutId = setTimeout(() => {
+                // console.log(1);
+                if (!isConnected) {
+                    checkColor('sl1', 0, 0);
+                    checkColor('sl2', 0, 0);
+                    checkColor('sl3', 0, 0);
+                    checkColor('luquet', 0, 0);
+                    checkDigitAnalog('d1');
+                    checkDigitAnalog('d2');
+                    checkDigitAnalog('d3');
+                    checkDigitAnalog('a1');
+                    checkDigitAnalog('a2');
+                    checkDigitAnalog('a3');
+                    console.log("Không thể kết nối trong 30 giây. Ngắt kết nối.");
+                    client.disconnect();
+                }
+            }, 30000);
+            }else{
+                console.log("Điều kiện là true, hủy setTimeout.");
+                clearTimeout(timeoutId); // Hủy setTimeout nếu điều kiện đúng
             }
-        }, 30000);
+        }
+
 
         // Hàm xử lý khi kết nối thành công
         client.onConnectionLost = (responseObject) => {
@@ -178,13 +185,12 @@
                 checkDigitAnalog('a1');
                 checkDigitAnalog('a2');
                 checkDigitAnalog('a3');
-                isConnected = false;
                 console.log("Kết nối bị mất: " + responseObject.errorMessage);
             }
         };
 
-        client.onConnect = function () {
-            isConnected = true; // Hủy timeout nếu kết nối thành công
+        client.onConnect = function() {
+            setTimeOut(true);
             console.log("Kết nối thành công!");
         };
 
@@ -194,7 +200,7 @@
                 const xhr = new XMLHttpRequest();
 
                 // URL của API hoặc server
-                const url = `{{route('store-statisticals')}}`;
+                const url = `{{ route('store-statisticals') }}`;
 
                 // Dữ liệu bạn muốn gửi
                 const data = JSON.stringify(dat);
@@ -206,7 +212,7 @@
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.setRequestHeader("X-CSRF-TOKEN", csrfToken);
                 // Xử lý sự kiện khi có phản hồi từ server
-                xhr.onreadystatechange = function () {
+                xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) { // 4: Request hoàn thành
                         if (xhr.status === 200) { // 200: Thành công
                             console.log("Response:", xhr.responseText);
@@ -225,27 +231,34 @@
         client.onMessageArrived = (message) => {
             //console.log(`Nhận tin nhắn từ ${message.destinationName}: ${message.payloadString}`);
             const dat = JSON.parse(message.payloadString);
+            setTimeOut(false);
+            console.log(1, dat);
             if (dat) {
+                isConnected = true; // Hủy timeout nếu kết nối thành công
+
                 checkColor('sl1', dat.node_online[0], dat.node_waring[0]);
                 checkColor('sl2', dat.node_online[1], dat.node_waring[1]);
                 checkColor('sl3', dat.node_online[2], dat.node_waring[2]);
                 checkColor('luquet', dat.node_online[3], dat.node_waring[3]);
-                if(dat.node_online[3] > 0){
+                if (dat.node_online[3] > 0) {
                     checkDigitAnalog('d1', dat.Digit[0]);
                     checkDigitAnalog('d2', dat.Digit[1]);
                     checkDigitAnalog('d3', dat.Digit[2]);
                     checkDigitAnalog('a1', dat.Analog[0]);
                     checkDigitAnalog('a2', dat.Analog[1]);
                     checkDigitAnalog('a3', dat.Analog[2]);
-                }else{
+                } else {
                     checkDigitAnalog('d1');
                     checkDigitAnalog('d2');
                     checkDigitAnalog('d3');
                     checkDigitAnalog('a1');
                     checkDigitAnalog('a2');
                     checkDigitAnalog('a3');
+                    isConnected = false;
                 }
                 createDatas(dat);
+            } else {
+                setTimeOut(false);
             }
             // Hiển thị danh sách nhiệt độ
 
@@ -294,7 +307,6 @@
         client.connect({
             onSuccess: () => {
                 console.log("Kết nối thành công!");
-                clearTimeout(timeout); // Xóa timeout nếu kết nối thành công
                 client.onConnect();
                 // Subscribe một chủ đề
                 const topic = "LangNu/report";
@@ -319,7 +331,7 @@
                 checkDigitAnalog('a1');
                 checkDigitAnalog('a2');
                 checkDigitAnalog('a3');
-                isConnected = false;
+                setTimeOut(false);
                 console.error("Kết nối thất bại: " + error.errorMessage);
                 document.getElementById("status").textContent = "Kết nối thất bại";
             },
@@ -338,12 +350,5 @@
             client.send(message);
             console.log('Calibration command sent:', message.payloadString);
         });
-
-
-    </script>
-
-    <script>
-
-
     </script>
 @endsection
