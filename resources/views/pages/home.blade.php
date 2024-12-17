@@ -303,7 +303,6 @@
         // Kết nối tới broker
         client.connect({
             onSuccess: () => {
-                console.log("Kết nối thành công!");
                 client.onConnect();
                 // Subscribe một chủ đề
                 const topic = "LangNu/report";
