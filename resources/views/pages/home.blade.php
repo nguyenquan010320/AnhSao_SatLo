@@ -304,7 +304,6 @@
         client.connect({
             onSuccess: () => {
                 console.log("Kết nối thành công!");
-                setTimeOut(true);
                 client.onConnect();
                 // Subscribe một chủ đề
                 const topic = "LangNu/report";
