@@ -25,7 +25,7 @@
 
                     <button id="sl3" title="" class="btn__three">SL3</button>
 
-                    <button title="" class="btn__gateway">Gateway</button>
+                    <button title="" id="gateway" class="btn__gateway">Gateway</button>
                 </div>
 
                 <div class="container d-flex justify-content-center align-items-center">
@@ -143,7 +143,6 @@
         var client = new Paho.MQTT.Client(brokerUrl, brokerPort, clientId);
 
         // Biến theo dõi trạng thái kết nối
-
         let timeoutId;
         // Timeout: Ngắt kết nối sau 30 giây nếu không thành công
         function setTimeOut(isConnected = false) {
@@ -161,11 +160,13 @@
                     checkDigitAnalog('a1');
                     checkDigitAnalog('a2');
                     checkDigitAnalog('a3');
+                    document.getElementById('gateway').style.backgroundColor= 'gray';
                     console.log("Không thể kết nối trong 30 giây. Ngắt kết nối.");
                     client.disconnect();
                 }
             }, 30000);
             }else{
+                document.getElementById('gateway').style.backgroundColor= 'green';
                 console.log("Điều kiện là true, hủy setTimeout.");
                 clearTimeout(timeoutId); // Hủy setTimeout nếu điều kiện đúng
             }
@@ -185,6 +186,7 @@
                 checkDigitAnalog('a1');
                 checkDigitAnalog('a2');
                 checkDigitAnalog('a3');
+                document.getElementById('gateway').style.backgroundColor= 'gray';
                 console.log("Kết nối bị mất: " + responseObject.errorMessage);
             }
         };
@@ -231,11 +233,7 @@
         client.onMessageArrived = (message) => {
             //console.log(`Nhận tin nhắn từ ${message.destinationName}: ${message.payloadString}`);
             const dat = JSON.parse(message.payloadString);
-            setTimeOut(false);
-            console.log(1, dat);
             if (dat) {
-                isConnected = true; // Hủy timeout nếu kết nối thành công
-
                 checkColor('sl1', dat.node_online[0], dat.node_waring[0]);
                 checkColor('sl2', dat.node_online[1], dat.node_waring[1]);
                 checkColor('sl3', dat.node_online[2], dat.node_waring[2]);
@@ -254,7 +252,6 @@
                     checkDigitAnalog('a1');
                     checkDigitAnalog('a2');
                     checkDigitAnalog('a3');
-                    isConnected = false;
                 }
                 createDatas(dat);
             } else {
@@ -307,6 +304,7 @@
         client.connect({
             onSuccess: () => {
                 console.log("Kết nối thành công!");
+                setTimeOut(true);
                 client.onConnect();
                 // Subscribe một chủ đề
                 const topic = "LangNu/report";
